@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+
+	"github.com/jonavdm/aoc-2023/day01"
 )
 
 type Runner struct {
@@ -16,7 +18,9 @@ func main() {
 	replacedInput := flag.String("file", "", "Run with a different input")
 	flag.Parse()
 
-	runners := []Runner{}
+	runners := []Runner{
+		{1, day01.Run, "day01"},
+	}
 
 	for _, runner := range runners {
 		if *onlyDay > 0 && runner.Day == *onlyDay {
