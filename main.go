@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jonavdm/aoc-2023/day01"
+	"github.com/jonavdm/aoc-2023/day02"
 )
 
 type Runner struct {
@@ -20,6 +21,7 @@ func main() {
 
 	runners := []Runner{
 		{1, day01.Run, "day01"},
+		{2, day02.Run, "day02"},
 	}
 
 	for _, runner := range runners {
