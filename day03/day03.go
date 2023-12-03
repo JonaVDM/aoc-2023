@@ -116,8 +116,6 @@ func (s *Solver) isAdjanced(row int, cols []int) bool {
 
 func (s *Solver) isSymbol(char byte, x, y int) bool {
 	if char == '*' {
-		fmt.Println("Check")
-		fmt.Println(x, y)
 		str := fmt.Sprintf("%d,%d", x, y)
 		if _, ok := s.GearCounter[str]; !ok {
 			s.GearCounter[str] = []int{s.Current}
