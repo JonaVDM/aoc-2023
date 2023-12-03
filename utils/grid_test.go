@@ -66,3 +66,9 @@ func TestGetAdjacend(t *testing.T) {
 		assert.Equal(t, test.out, utils.GetAdjacend(test.x, test.y, test.height, test.width))
 	}
 }
+
+func BenchmarkGetAdjacend(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		utils.GetAdjacend(5, 5, 10, 10)
+	}
+}
