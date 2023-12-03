@@ -64,50 +64,13 @@ func (s *Solver) convert(row int, cols []int) int {
 }
 
 func (s *Solver) isAdjanced(row int, cols []int) bool {
-	// check left
-	canLeft := cols[0] > 0
-	if canLeft && s.isSymbol(s.Input[row][cols[0]-1], cols[0]-1, row) {
-		return true
-	}
+	for _, col := range cols {
+		adj := utils.GetAdjacend(col, row, len(s.Input), len(s.Input[0]))
 
-	// check right
-	l := len(cols) - 1
-	canRight := cols[l] < len(s.Input[0])-1
-	if canRight && s.isSymbol(s.Input[row][cols[l]+1], cols[l]+1, row) {
-		return true
-	}
-
-	// check up
-	if row > 0 {
-		for _, col := range cols {
-			if s.isSymbol(s.Input[row-1][col], col, row-1) {
+		for _, point := range adj {
+			if s.isSymbol(s.Input[point.Y][point.X], point.X, point.Y) {
 				return true
 			}
-		}
-
-		if canLeft && s.isSymbol(s.Input[row-1][cols[0]-1], cols[0]-1, row-1) {
-			return true
-		}
-
-		if canRight && s.isSymbol(s.Input[row-1][cols[l]+1], cols[l]+1, row-1) {
-			return true
-		}
-	}
-
-	// check down
-	if row < len(s.Input)-1 {
-		for _, col := range cols {
-			if s.isSymbol(s.Input[row+1][col], col, row+1) {
-				return true
-			}
-		}
-
-		if canLeft && s.isSymbol(s.Input[row+1][cols[0]-1], cols[0]-1, row+1) {
-			return true
-		}
-
-		if canRight && s.isSymbol(s.Input[row+1][cols[l]+1], cols[l]+1, row+1) {
-			return true
 		}
 	}
 
