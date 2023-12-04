@@ -17,4 +17,3 @@ func BenchmarkRun(b *testing.B) {
 		day04.Run("day04")
 	}
 }
-

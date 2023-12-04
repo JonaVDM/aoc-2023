@@ -52,12 +52,6 @@ func getScore(input []string) int {
 	return total
 }
 
-type Card struct {
-	Winning []int
-	Numbers []int
-	Score   []int
-}
-
 func getRealScore(input []string) int {
 
 	cards := make(map[int]int)
