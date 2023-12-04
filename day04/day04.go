@@ -70,7 +70,7 @@ func getRealScore(input []string) int {
 		}
 
 		for _, num := range strings.Split(nums[0], " ") {
-			if n, err := strconv.Atoi(num); err == nil {
+			if n, err := strconv.Atoi(num); err != nil {
 				continue
 			} else if _, ok := card[n]; ok {
 				score++
