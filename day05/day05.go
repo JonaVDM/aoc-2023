@@ -1,6 +1,7 @@
 package day05
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -40,19 +41,22 @@ func Run(file string) [2]interface{} {
 	}
 
 	smallestB := 10000000000000
-	for i := 0; i < len(solver.Seeds); i += 2 {
-		for seed := solver.Seeds[i]; seed < solver.Seeds[i]+solver.Seeds[i+1]; seed++ {
-			soil := solver.GetNext(seed, "soil")
-			fertilizer := solver.GetNext(soil, "fertilizer")
-			water := solver.GetNext(fertilizer, "water")
-			light := solver.GetNext(water, "light")
-			temperature := solver.GetNext(light, "temperature")
-			humidity := solver.GetNext(temperature, "humidity")
-			location := solver.GetNext(humidity, "location")
+	channel := make(chan int)
+	counter := 0
 
-			if location < smallestB {
-				smallestB = location
-			}
+	for i := 0; i < len(solver.Seeds); i += 2 {
+		go solver.FindValue(solver.Seeds[i], solver.Seeds[i+1], channel)
+		counter++
+	}
+
+	log.Println("Total routines:", counter)
+
+	for counter > 0 {
+		val := <-channel
+		counter--
+		log.Println("Done with one!", counter, "to go")
+		if val < smallestB {
+			smallestB = val
 		}
 	}
 
@@ -119,4 +123,22 @@ func (s *Solver) GetNext(source int, location string) int {
 	}
 
 	return source
+}
+
+func (s *Solver) FindValue(start, rang int, c chan int) {
+	lowest := 10000000000000000
+	for seed := start; seed < start+rang; seed++ {
+		soil := s.GetNext(seed, "soil")
+		fertilizer := s.GetNext(soil, "fertilizer")
+		water := s.GetNext(fertilizer, "water")
+		light := s.GetNext(water, "light")
+		temperature := s.GetNext(light, "temperature")
+		humidity := s.GetNext(temperature, "humidity")
+		location := s.GetNext(humidity, "location")
+		if location < lowest {
+			lowest = location
+		}
+	}
+
+	c <- lowest
 }
