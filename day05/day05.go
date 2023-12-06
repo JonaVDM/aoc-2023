@@ -8,16 +8,9 @@ import (
 	"github.com/jonavdm/aoc-2023/utils"
 )
 
-type Location struct {
-	Name        string
-	Parent      string
-	Destination []int
-	Source      []int
-	Range       []int
-}
-
 type Solver struct {
-	Locations map[string]*Location
+	// dest, source start, source end
+	Locations map[string][][3]int
 	Seeds     []int
 }
 
@@ -68,7 +61,7 @@ func Run(file string) [2]interface{} {
 
 func parse(input []string) Solver {
 	solver := Solver{
-		Locations: make(map[string]*Location),
+		Locations: make(map[string][][3]int),
 		Seeds:     make([]int, 0),
 	}
 
@@ -87,15 +80,8 @@ func parse(input []string) Solver {
 
 		if next {
 			current = strings.Split(strings.Split(line, " ")[0], "-")[2]
-			thing := Location{
-				Name:        strings.Split(strings.Split(line, " ")[0], "-")[2],
-				Parent:      strings.Split(strings.Split(line, " ")[0], "-")[0],
-				Destination: make([]int, 0),
-				Source:      make([]int, 0),
-				Range:       make([]int, 0),
-			}
-			solver.Locations[current] = &thing
 			next = false
+			solver.Locations[current] = make([][3]int, 0)
 			continue
 		}
 
@@ -104,22 +90,20 @@ func parse(input []string) Solver {
 		source, _ := strconv.Atoi(values[1])
 		ran, _ := strconv.Atoi(values[2])
 
-		solver.Locations[current].Destination = append(solver.Locations[current].Destination, dest)
-		solver.Locations[current].Source = append(solver.Locations[current].Source, source)
-		solver.Locations[current].Range = append(solver.Locations[current].Range, ran)
+		solver.Locations[current] = append(solver.Locations[current], [3]int{dest, source, source + ran})
 	}
 
 	return solver
 }
 
 func (s *Solver) GetNext(source int, location string) int {
-	for i, val := range s.Locations[location].Source {
-		if source < val || source > val+s.Locations[location].Range[i] {
+	for _, val := range s.Locations[location] {
+		if source < val[1] || source > val[2] {
 			continue
 		}
 
-		offset := source - val
-		return s.Locations[location].Destination[i] + offset
+		offset := source - val[1]
+		return val[0] + offset
 	}
 
 	return source
