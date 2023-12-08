@@ -37,13 +37,13 @@ func main() {
 		{8, day08.Run, "day08"},
 	}
 
-	fmt.Println("╔══════════════════════════════════════════════════════════╗")
-	fmt.Println("║                -- Advent Of Code 2023 --                 ║")
-	fmt.Println("╚══════════════════════════════════════════════════════════╝")
+	fmt.Println(" ╔═════════════════════════════════════════════════════════╗")
+	fmt.Println(" ║                -- Advent Of Code 2023 --                ║")
+	fmt.Println(" ╚═════════════════════════════════════════════════════════╝")
 	fmt.Println()
-	fmt.Println("┏━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━┓")
-	fmt.Println("┃ Day │ Part One         │ Part Two         │ Time         ┃")
-	fmt.Println("┠─────┼──────────────────┼──────────────────┼──────────────┨")
+	fmt.Println(" ┏━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━┓")
+	fmt.Println(" ┃ Day │ Part One         │ Part Two         │ Time        ┃")
+	fmt.Println(" ┠─────┼──────────────────┼──────────────────┼─────────────┨")
 
 	for _, runner := range runners {
 		start := time.Now()
@@ -63,7 +63,7 @@ func main() {
 
 		duration := time.Now().Sub(start)
 
-		fmt.Printf("┃ %2d  │ %16v │ %16v │ %12v ┃\n", runner.Day, out[0], out[1], duration)
+		fmt.Printf(" ┃ %2d  │ %16v │ %16v │ %11v ┃\n", runner.Day, out[0], out[1], duration)
 	}
-	fmt.Println("┗━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━┛")
+	fmt.Println(" ┗━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━┛")
 }
