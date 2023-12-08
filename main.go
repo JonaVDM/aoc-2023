@@ -11,6 +11,7 @@ import (
 	"github.com/jonavdm/aoc-2023/day05"
 	"github.com/jonavdm/aoc-2023/day06"
 	"github.com/jonavdm/aoc-2023/day07"
+	"github.com/jonavdm/aoc-2023/day08"
 )
 
 type Runner struct {
@@ -32,6 +33,7 @@ func main() {
 		{5, day05.Run, "day05"},
 		{6, day06.Run, "day06"},
 		{7, day07.Run, "day07"},
+		{8, day08.Run, "day08"},
 	}
 
 	for _, runner := range runners {
