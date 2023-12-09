@@ -1,7 +1,7 @@
 package day05
 
 import (
-	"log"
+	"math"
 	"strconv"
 	"strings"
 
@@ -18,7 +18,7 @@ func Run(file string) [2]interface{} {
 	data := utils.ReadFile(file)
 	solver := parse(data)
 
-	smallestA := 10000000000000
+	smallestA := math.MaxInt
 	for _, seed := range solver.Seeds {
 		soil := solver.GetNext(seed, "soil")
 		fertilizer := solver.GetNext(soil, "fertilizer")
@@ -33,23 +33,14 @@ func Run(file string) [2]interface{} {
 		}
 	}
 
-	smallestB := 10000000000000
-	channel := make(chan int)
-	counter := 0
-
-	for i := 0; i < len(solver.Seeds); i += 2 {
-		go solver.FindValue(solver.Seeds[i], solver.Seeds[i+1], channel)
-		counter++
+	locations := []string{
+		"soil", "fertilizer", "water", "light", "temperature", "humidity", "location",
 	}
 
-	log.Println("Total routines:", counter)
-
-	for counter > 0 {
-		val := <-channel
-		counter--
-		log.Println("Done with one!", counter, "to go")
-		if val < smallestB {
-			smallestB = val
+	smallestB := math.MaxInt
+	for i := 0; i < len(solver.Seeds); i += 2 {
+		if x := solver.FindRange([2]int{solver.Seeds[i], solver.Seeds[i] + solver.Seeds[i+1] - 1}, locations); x < smallestB {
+			smallestB = x
 		}
 	}
 
@@ -109,20 +100,62 @@ func (s *Solver) GetNext(source int, location string) int {
 	return source
 }
 
-func (s *Solver) FindValue(start, rang int, c chan int) {
-	lowest := 10000000000000000
-	for seed := start; seed < start+rang; seed++ {
-		soil := s.GetNext(seed, "soil")
-		fertilizer := s.GetNext(soil, "fertilizer")
-		water := s.GetNext(fertilizer, "water")
-		light := s.GetNext(water, "light")
-		temperature := s.GetNext(light, "temperature")
-		humidity := s.GetNext(temperature, "humidity")
-		location := s.GetNext(humidity, "location")
-		if location < lowest {
-			lowest = location
+func (s *Solver) GetNextRange(source [2]int, location string) [][2]int {
+	queue := make([][2]int, 1)
+	queue[0] = source
+
+	out := make([][2]int, 0)
+
+	for len(queue) > 0 {
+		sor := queue[0]
+		queue = queue[1:]
+		br := false
+
+		for _, m := range s.Locations[location] {
+			// source is fully in map
+			if sor[0] >= m[1] && sor[1] <= m[2] {
+				between := sor[1] - sor[0]
+				offset := sor[0] - m[1]
+				out = append(out, [2]int{m[0] + offset, m[0] + offset + between})
+				br = true
+				break
+			}
+
+			// map is fully in source
+			if m[1] >= sor[0] && m[2] <= sor[1] {
+				out = append(out, [2]int{m[0], m[0] + m[2] - m[1] - 1})
+				queue = append(queue, [2]int{sor[0], m[1] - 1})
+				queue = append(queue, [2]int{m[2], sor[1]})
+				br = true
+				break
+			}
+		}
+
+		if !br {
+			out = append(out, sor)
 		}
 	}
 
-	c <- lowest
+	return out
+}
+
+func (s *Solver) FindRange(source [2]int, locations []string) int {
+	if next := s.GetNextRange(source, locations[0]); len(locations) == 1 {
+		smallest := next[0][0]
+		for _, n := range next[1:] {
+			if smallest > n[0] {
+				smallest = n[0]
+			}
+		}
+		return smallest
+	} else {
+		smallest := math.MaxInt
+		for _, n := range next {
+			num := s.FindRange(n, locations[1:])
+			if num < smallest {
+				smallest = num
+			}
+		}
+		return smallest
+	}
 }
