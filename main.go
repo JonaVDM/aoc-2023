@@ -9,12 +9,10 @@ import (
 	"github.com/jonavdm/aoc-2023/day02"
 	"github.com/jonavdm/aoc-2023/day03"
 	"github.com/jonavdm/aoc-2023/day04"
-	"github.com/jonavdm/aoc-2023/day09"
-
-	// "github.com/jonavdm/aoc-2023/day05"
 	"github.com/jonavdm/aoc-2023/day06"
 	"github.com/jonavdm/aoc-2023/day07"
 	"github.com/jonavdm/aoc-2023/day08"
+	"github.com/jonavdm/aoc-2023/day09"
 )
 
 type Runner struct {
@@ -48,6 +46,8 @@ func main() {
 	fmt.Println(" ┃ Day │ Part One         │ Part Two         │ Time        ┃")
 	fmt.Println(" ┠─────┼──────────────────┼──────────────────┼─────────────┨")
 
+	var totalDuration time.Duration
+
 	for _, runner := range runners {
 		start := time.Now()
 		var out [2]interface{}
@@ -65,8 +65,15 @@ func main() {
 		}
 
 		duration := time.Now().Sub(start)
+		totalDuration += duration
 
-		fmt.Printf(" ┃ %2d  │ %16v │ %16v │ %11v ┃\n", runner.Day, out[0], out[1], duration)
+		if out[0] != nil {
+			fmt.Printf(" ┃ %2d  │ %16v │ %16v │ %11v ┃\n", runner.Day, out[0], out[1], duration)
+		}
 	}
 	fmt.Println(" ┗━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━┛")
+
+	if *onlyDay == -1 {
+		fmt.Println("  Total duration", totalDuration)
+	}
 }
