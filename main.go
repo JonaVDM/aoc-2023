@@ -25,6 +25,7 @@ type Runner struct {
 func main() {
 	onlyDay := flag.Int("day", -1, "Specify the day")
 	replacedInput := flag.String("file", "", "Run with a different input")
+	onlyTime := flag.Bool("time", false, "Show only the time to completion")
 	flag.Parse()
 
 	runners := []Runner{
@@ -39,13 +40,7 @@ func main() {
 		{9, day09.Run, "day09"},
 	}
 
-	fmt.Println(" ╔═════════════════════════════════════════════════════════╗")
-	fmt.Println(" ║                -- Advent Of Code 2023 --                ║")
-	fmt.Println(" ╚═════════════════════════════════════════════════════════╝")
-	fmt.Println()
-	fmt.Println(" ┏━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━┓")
-	fmt.Println(" ┃ Day │ Part One         │ Part Two         │ Time        ┃")
-	fmt.Println(" ┠─────┼──────────────────┼──────────────────┼─────────────┨")
+	printHeader(*onlyTime)
 
 	var totalDuration time.Duration
 
@@ -69,12 +64,50 @@ func main() {
 		totalDuration += duration
 
 		if out[0] != nil {
-			fmt.Printf(" ┃ %2d  │ %16v │ %16v │ %11v ┃\n", runner.Day, out[0], out[1], duration)
+			printRow(runner.Day, out, duration, *onlyTime)
 		}
 	}
-	fmt.Println(" ┗━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━┛")
+	printFooter(*onlyDay, totalDuration, *onlyTime)
+}
 
-	if *onlyDay == -1 {
-		fmt.Println("  Total duration", totalDuration)
+func printHeader(onlyTime bool) {
+	if !onlyTime {
+		fmt.Println(" ╔═════════════════════════════════════════════════════════╗")
+		fmt.Println(" ║                -- Advent Of Code 2023 --                ║")
+		fmt.Println(" ╚═════════════════════════════════════════════════════════╝")
+		fmt.Println()
+		fmt.Println(" ┏━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━┓")
+		fmt.Println(" ┃ Day │ Part One         │ Part Two         │ Time        ┃")
+		fmt.Println(" ┠─────┼──────────────────┼──────────────────┼─────────────┨")
+	} else {
+		fmt.Println(" ╔════════════════════════════╗")
+		fmt.Println(" ║ -- Advent Of Code 2023 --  ║")
+		fmt.Println(" ╚════════════════════════════╝")
+		fmt.Println()
+		fmt.Println(" ┏━━━━━━━┯━━━━━━━━━━━━━━━━━━━━┓")
+		fmt.Println(" ┃ Day   │ Time               ┃")
+		fmt.Println(" ┠───────┼────────────────────┨")
+	}
+}
+
+func printRow(day int, out [2]interface{}, duration time.Duration, onlyTime bool) {
+	if !onlyTime {
+		fmt.Printf(" ┃ %2d  │ %-16v │ %-16v │ %-11v ┃\n", day, out[0], out[1], duration)
+	} else {
+		fmt.Printf(" ┃ %2d    │ %-18v ┃\n", day, duration)
+	}
+}
+
+func printFooter(onlyDay int, duration time.Duration, onlyTime bool) {
+	if !onlyTime {
+		fmt.Println(" ┗━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━┛")
+
+		if onlyDay == -1 {
+			fmt.Println("  Total duration", duration)
+		}
+	} else {
+		fmt.Println(" ┠───────┼────────────────────┨")
+		fmt.Printf(" ┃ Total │ %-18v ┃\n", duration)
+		fmt.Println(" ┗━━━━━━━┷━━━━━━━━━━━━━━━━━━━━┛")
 	}
 }
