@@ -9,6 +9,8 @@ import (
 	"github.com/jonavdm/aoc-2023/day02"
 	"github.com/jonavdm/aoc-2023/day03"
 	"github.com/jonavdm/aoc-2023/day04"
+	"github.com/jonavdm/aoc-2023/day09"
+
 	// "github.com/jonavdm/aoc-2023/day05"
 	"github.com/jonavdm/aoc-2023/day06"
 	"github.com/jonavdm/aoc-2023/day07"
@@ -35,6 +37,7 @@ func main() {
 		{6, day06.Run, "day06"},
 		{7, day07.Run, "day07"},
 		{8, day08.Run, "day08"},
+		{9, day09.Run, "day09"},
 	}
 
 	fmt.Println(" ╔═════════════════════════════════════════════════════════╗")
