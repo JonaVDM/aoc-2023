@@ -43,7 +43,7 @@ func Run(file string) [2]interface{} {
 }
 
 func findScore(time, score int) int {
-	var start, end int
+	var start int
 
 	for i := 0; i <= time; i++ {
 		remaining := time - i
@@ -53,13 +53,5 @@ func findScore(time, score int) int {
 		}
 	}
 
-	for i := time; i >= 0; i-- {
-		remaining := time - i
-		if score < remaining*i {
-			end = i
-			break
-		}
-	}
-
-	return end - start + 1
+	return time - start*2 + 1
 }
