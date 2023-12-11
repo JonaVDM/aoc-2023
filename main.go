@@ -15,6 +15,7 @@ import (
 	"github.com/jonavdm/aoc-2023/day08"
 	"github.com/jonavdm/aoc-2023/day09"
 	"github.com/jonavdm/aoc-2023/day10"
+	"github.com/jonavdm/aoc-2023/day11"
 )
 
 type Runner struct {
@@ -40,6 +41,7 @@ func main() {
 		{8, day08.Run, "day08"},
 		{9, day09.Run, "day09"},
 		{10, day10.Run, "day10"},
+		{11, day11.Run, "day11"},
 	}
 
 	printHeader(*onlyTime)
